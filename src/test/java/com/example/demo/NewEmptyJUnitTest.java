@@ -90,10 +90,17 @@ public class NewEmptyJUnitTest {
     }
     
     @Test
-    public void searchTestQueryIndex(){
-        System.out.println("searchTestQueryIndex");
-        List<com.example.demo.model.Test> testResults = testCustomRepository.findByNameAndDesc("prueba", "2");
+    public void searchTestQueryIndexByName(){
+        System.out.println("searchTestQueryIndexByName");
+        List<com.example.demo.model.Test> testResults = testCustomRepository.findByMyIdAndName("test", "prueba");
         testResults.forEach(System.out::println);
+    }
+    
+    @Test
+    public void searchTestQueryIndexByDesc(){
+        System.out.println("searchTestQueryIndexByDesc");
+        //List<com.example.demo.model.Test> testResults = testCustomRepository.findByMyIdAndDesc("test", "prueba", "desc");
+        //testResults.forEach(System.out::println);
     }
     
     @Test

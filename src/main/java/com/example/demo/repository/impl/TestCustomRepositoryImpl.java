@@ -30,15 +30,32 @@ public class TestCustomRepositoryImpl implements TestCustomRepository{
     
     
     @Override
-    public List<Test> findByNameAndDesc(String myId, String numTest) {
+    public List<Test> findByMyIdAndName(String myId, String nameTest) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
-        valueMap.put(":v_name", new AttributeValue().withS(myId));
-        valueMap.put(":v_desc", new AttributeValue().withS(numTest));
+        valueMap.put(":v_myId", new AttributeValue().withS(myId));
+        valueMap.put(":v_name", new AttributeValue().withS(nameTest));
         DynamoDBQueryExpression<Test> queryExpression = new DynamoDBQueryExpression<Test>()
-                .withIndexName("TestBy-Name-Index")
-                .withConsistentRead(false);
-                //.withKeyConditionExpression("nameTest = :v_name and desc = :v_desc")
-                //.withExpressionAttributeValues(valueMap);
+                .withKeyConditionExpression("myId = :v_myId and begins_with(nameTest, :v_name)")
+                .withExpressionAttributeValues(valueMap);
+        try{
+            return new DynamoDBMapper(amazonDynamoDB).query(Test.class, queryExpression);
+        }catch(Exception e){
+            System.out.println("Error: "+e);
+            return null;
+        }
+    }
+    
+    @Override
+    public List<Test> findByMyIdAndDesc(String myId, String nameTest, String descTest) {
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        //valueMap.put(":v_myId", new AttributeValue().withS(myId));
+        //valueMap.put(":v_name", new AttributeValue().withS(nameTest));
+        valueMap.put(":v_desc", new AttributeValue().withS(descTest));
+        DynamoDBQueryExpression<Test> queryExpression = new DynamoDBQueryExpression<Test>()
+                //.withKeyConditionExpression("myId = :v_myId and begins_with(nameTest, :v_name) and descTest = :v_desc")
+                .withIndexName("DescIndex")
+                .withFilterExpression("descTest = :v_desc")
+                .withExpressionAttributeValues(valueMap);
         try{
             return new DynamoDBMapper(amazonDynamoDB).query(Test.class, queryExpression);
         }catch(Exception e){

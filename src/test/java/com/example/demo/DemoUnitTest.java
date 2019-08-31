@@ -6,7 +6,9 @@
 package com.example.demo;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
@@ -44,27 +46,45 @@ public class DemoUnitTest {
 
     @Autowired
     PersonRepository personRepository;
-    
+
     private static boolean testTableExist = false;
     private static boolean personTableExist = false;
-
 
     @Before
     public void setup() throws Exception {
 
         System.err.println("before");
+
+        /*DynamoDB dynamoDB = new DynamoDB(amazonDynamoDB);
+
+        Table table = dynamoDB.getTable("test");
         
-        if (!testTableExist) {
-            if (TableUtils.createTableIfNotExists(amazonDynamoDB, new DynamoDBMapper(amazonDynamoDB).generateCreateTableRequest(com.example.demo.model.Test.class)
-                    .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)))) {
-                System.out.println("create table");
-                TableUtils.waitUntilActive(amazonDynamoDB, "Tasks");
-            } else {
-                System.out.println("exist table");
+        try {
+            System.out.println("Attempting to delete table; please wait...");
+            table.delete();
+            table.waitForDelete();
+            System.out.print("Success.");
+
+        }
+        catch (Exception e) {
+            System.err.println("Unable to delete table: ");
+            System.err.println(e.getMessage());
+        }*/
+        try {
+            if (!testTableExist) {
+                if (TableUtils.createTableIfNotExists(amazonDynamoDB, new DynamoDBMapper(amazonDynamoDB).generateCreateTableRequest(com.example.demo.model.Test.class)
+                        .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)))) {
+                    System.out.println("create table");
+                    TableUtils.waitUntilActive(amazonDynamoDB, "Tasks");
+                } else {
+                    System.out.println("exist table");
+                }
+                testTableExist = true;
             }
-            testTableExist = true;
-        }    
-        
+        } catch (Exception e) {
+            System.err.println("error: " + e);
+        }
+
         /*if (!personTableExist) {
             if (TableUtils.createTableIfNotExists(amazonDynamoDB, new DynamoDBMapper(amazonDynamoDB).generateCreateTableRequest(Person.class)
                     .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)))) {
@@ -74,7 +94,7 @@ public class DemoUnitTest {
                 System.out.println("exist table");
             }
             personTableExist = true;
-        } */   
+        } */
     }
 
     // TODO add test methods here.

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
  */
 public interface TestCustomRepository {
     
-    List<Test> findByNameAndDesc(String myId, String numTest );
-    
+    List<Test> findByMyIdAndName(String myId, String nameTest );
+    List<Test> findByMyIdAndDesc(String myId, String nameTest, String descTest );
     void save(Test test);
     List<Test> findAll();
 }

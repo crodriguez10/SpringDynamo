@@ -7,7 +7,6 @@ package com.example.demo.service;
 
 import com.example.demo.model.Test;
 import com.example.demo.repository.TestCustomRepository;
-import com.example.demo.repository.TestRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,10 +22,10 @@ public class TestService {
     private TestCustomRepository testCustomRepository;
     
     public List<Test> findAllTest(){
-        return testCustomRepository.findAll();
+        return testCustomRepository.findAllCustom();
     }
     
     public void saveTest(Test test){
-        testCustomRepository.save(test);
+        testCustomRepository.saveCustom(test);
     }
 }

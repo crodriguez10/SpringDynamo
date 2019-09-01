@@ -48,12 +48,11 @@ public class TestCustomRepositoryImpl implements TestCustomRepository{
     @Override
     public List<Test> findByMyIdAndDesc(String myId, String nameTest, String descTest) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
-        //valueMap.put(":v_myId", new AttributeValue().withS(myId));
-        //valueMap.put(":v_name", new AttributeValue().withS(nameTest));
+        valueMap.put(":v_myId", new AttributeValue().withS(myId));
+        valueMap.put(":v_name", new AttributeValue().withS(nameTest));
         valueMap.put(":v_desc", new AttributeValue().withS(descTest));
         DynamoDBQueryExpression<Test> queryExpression = new DynamoDBQueryExpression<Test>()
-                //.withKeyConditionExpression("myId = :v_myId and begins_with(nameTest, :v_name) and descTest = :v_desc")
-                .withIndexName("DescIndex")
+                .withKeyConditionExpression("myId = :v_myId and begins_with(nameTest, :v_name)")
                 .withFilterExpression("descTest = :v_desc")
                 .withExpressionAttributeValues(valueMap);
         try{
@@ -65,12 +64,12 @@ public class TestCustomRepositoryImpl implements TestCustomRepository{
     }
 
     @Override
-    public void save(Test test) {
+    public void saveCustom(Test test) {
         new DynamoDBMapper(amazonDynamoDB).save(test);
     }
     
     @Override
-    public List<Test> findAll(){
+    public List<Test> findAllCustom(){
         return new DynamoDBMapper(amazonDynamoDB).scan(Test.class, new DynamoDBScanExpression());
     }
     

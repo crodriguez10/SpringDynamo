@@ -17,6 +17,6 @@ public interface TestCustomRepository {
     
     List<Test> findByMyIdAndName(String myId, String nameTest );
     List<Test> findByMyIdAndDesc(String myId, String nameTest, String descTest );
-    void save(Test test);
-    List<Test> findAll();
+    void saveCustom(Test test);
+    List<Test> findAllCustom();
 }

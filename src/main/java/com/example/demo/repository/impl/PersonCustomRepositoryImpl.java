@@ -21,14 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author cesar.rodriguez
  */
-public class PersonCustomRepositoryImpl implements PersonCustomRepository{
-   
+public class PersonCustomRepositoryImpl implements PersonCustomRepository {
+
     @Autowired
     private AmazonDynamoDB amazonDynamoDB;
-    
+
     @Override
     public List<Person> findPersonByCellphoneCustom(String cellphone) {
-       
+
         Map<String, AttributeValue> valueMap = new HashMap<>();
         valueMap.put(":v_id", new AttributeValue().withS("186dc3b0-832d-4c1b-be95-480522d18066"));
         valueMap.put(":v_cellphone", new AttributeValue().withS(cellphone));
@@ -36,7 +36,7 @@ public class PersonCustomRepositoryImpl implements PersonCustomRepository{
                 .withKeyConditionExpression("id = :v_id")
                 .withFilterExpression("cellphone = :v_cellphone")
                 .withExpressionAttributeValues(valueMap);
-        
+
         return new DynamoDBMapper(amazonDynamoDB).query(Person.class, queryExpression);
     }
 
@@ -49,16 +49,29 @@ public class PersonCustomRepositoryImpl implements PersonCustomRepository{
                 .withExpressionAttributeValues(valueMap);
         return new DynamoDBMapper(amazonDynamoDB).scan(Person.class, scanExpression);
     }
-    
+
     @Override
     public List<Person> scanPersonByOcupationNameCustom(String profesion) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
         valueMap.put(":v_profesion", new AttributeValue().withS(profesion));
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("ocupation.profesion = :v_profesion")
+                .withFilterExpression("coloumnname.ocupation.profesion = :v_profesion")
                 .withExpressionAttributeValues(valueMap);
         return new DynamoDBMapper(amazonDynamoDB).scan(Person.class, scanExpression);
     }
-    
-    
+
+    @Override
+    public List<Person> findPersonByNameAndAge(String name, int age) {
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":v_name_age", new AttributeValue().withS(name+"-"+age));
+        DynamoDBQueryExpression<Person> queryExpression = new DynamoDBQueryExpression<Person>()
+                .withIndexName("Name-age")
+                .withKeyConditionExpression("name-age = :v_name_age")
+                .withExpressionAttributeValues(valueMap)
+                .withScanIndexForward(true)
+                .withConsistentRead(false);
+        
+        return new DynamoDBMapper(amazonDynamoDB).query(Person.class, queryExpression);
+    }
+
 }

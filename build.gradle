@@ -13,13 +13,6 @@ repositories {
     mavenCentral()
 }
 
-/*dependencyManagement {
-imports  {
-//'org.springframework.data', name: 'spring-data-releasetrain', version: 'Dijkstra-RELEASE', ext: 'pom'
-//mavenBom  'org.springframework.data:spring-data-releasetrain:Hopper-SR10'
-}
-}*/
-
 dependencies {
     
     compile 'org.springframework.boot:spring-boot-starter-web'
@@ -28,7 +21,5 @@ dependencies {
     compile 'com.github.derjust:spring-data-dynamodb:5.0.2'
     implementation 'io.springfox:springfox-swagger2:2.7.0'    
     implementation 'io.springfox:springfox-swagger-ui:2.7.0'
-    //compile 'com.amazonaws:aws-java-sdk-dynamodb:1.11.34'
-    //compile 'org.springframework.data:spring-data-commons:2.1.1.RELEASE'
 
 }

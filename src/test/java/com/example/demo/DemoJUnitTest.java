@@ -8,9 +8,7 @@ package com.example.demo;
 import com.example.demo.model.Person;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.TestCustomRepository;
-import com.example.demo.repository.TestRepository;
 import java.util.List;
-import java.util.Optional;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,16 +26,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class NewEmptyJUnitTest {
+public class DemoJUnitTest {
     
     @Autowired
     PersonRepository personRepository;
-    //@Autowired
-    //TestRepository testRepository;
     @Autowired
     TestCustomRepository testCustomRepository;
     
-    public NewEmptyJUnitTest() {
+    public DemoJUnitTest() {
     }
     
     @BeforeClass
@@ -70,15 +66,15 @@ public class NewEmptyJUnitTest {
     public void getByCellphone() {
         System.err.println("test");
         List<Person> person = personRepository.findByCellphone("320597484");
-        /*assertTrue("Not empty", person.size() > 0);
+        assertTrue("Not empty", person.size() > 0);
         assertTrue("Contains item with expected cellphone",
-                person.get(0).getCellphone().equals(EXPECTED_TEST));*/
+                person.get(0).getCellphone().equals("320597484"));
         person.forEach(System.out::println);
     }
     
     @Test
     public void searchCustom() {
-        System.out.println("search custom");
+        System.out.println("search custom: ");
         List<Person> person = personRepository.scanPersonByOcupationNameCustom("Desarrollador");
         person.forEach(System.out::println);
     }
@@ -94,19 +90,22 @@ public class NewEmptyJUnitTest {
         System.out.println("searchTestQueryIndexByName");
         List<com.example.demo.model.Test> testResults = testCustomRepository.findByMyIdAndName("test", "prueba");
         testResults.forEach(System.out::println);
+        assertTrue("Not empty", testResults.size() > 0);
     }
     
     @Test
     public void searchTestQueryIndexByDesc(){
         System.out.println("searchTestQueryIndexByDesc");
-        //List<com.example.demo.model.Test> testResults = testCustomRepository.findByMyIdAndDesc("test", "prueba", "desc");
-        //testResults.forEach(System.out::println);
+        List<com.example.demo.model.Test> testResults = testCustomRepository.findByMyIdAndDesc("test", "prueba", "desc prueba 1");
+        testResults.forEach(System.out::println);
+        assertTrue("Not empty", testResults.size() > 0);
+        assertTrue("", "desc prueba 1".equals(testResults.get(0).getDescTest()));
     }
     
     @Test
-    public void searchTestById(){
-        System.out.println("searchTestById");
-        //Optional<com.example.demo.model.Test> test = testRepository.findById("1");
-        //System.out.println("test: "+test);
+    public void searchPersonByNameAndAge(){
+        System.out.println("work.. searchPersonByNameAndAge");
+        //List<Person> listPersons = personRepository.findPersonByNameAndAge("Cesar", 27);
+        //listPersons.forEach(System.out::println);
     }
 }

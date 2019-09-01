@@ -6,30 +6,22 @@
 package com.example.demo;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
+
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.example.demo.model.Person;
-import com.example.demo.model.ProductInfo;
+
 import com.example.demo.repository.PersonRepository;
 
-import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  *
@@ -37,64 +29,57 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class DemoUnitTest {
-
-    private DynamoDBMapper dynamoDBMapper;
-
+public class InitUnitTest {
     @Autowired
     private AmazonDynamoDB amazonDynamoDB;
 
     @Autowired
     PersonRepository personRepository;
 
-    private static boolean testTableExist = false;
-    private static boolean personTableExist = false;
-
     @Before
     public void setup() throws Exception {
 
         System.err.println("before");
 
-        /*DynamoDB dynamoDB = new DynamoDB(amazonDynamoDB);
+        DynamoDB dynamoDB = new DynamoDB(amazonDynamoDB);
 
         Table table = dynamoDB.getTable("test");
-        
+
         try {
             System.out.println("Attempting to delete table; please wait...");
             table.delete();
             table.waitForDelete();
             System.out.print("Success.");
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Unable to delete table: ");
             System.err.println(e.getMessage());
-        }*/
+        }
         try {
-            if (!testTableExist) {
-                if (TableUtils.createTableIfNotExists(amazonDynamoDB, new DynamoDBMapper(amazonDynamoDB).generateCreateTableRequest(com.example.demo.model.Test.class)
-                        .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)))) {
-                    System.out.println("create table");
-                    TableUtils.waitUntilActive(amazonDynamoDB, "Tasks");
-                } else {
-                    System.out.println("exist table");
-                }
-                testTableExist = true;
+
+            if (TableUtils.createTableIfNotExists(amazonDynamoDB, new DynamoDBMapper(amazonDynamoDB).generateCreateTableRequest(com.example.demo.model.Test.class)
+                    .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)))) {
+                System.out.println("create table");
+                TableUtils.waitUntilActive(amazonDynamoDB, "Test");
+            } else {
+                System.out.println("exist table test");
             }
         } catch (Exception e) {
             System.err.println("error: " + e);
         }
 
-        /*if (!personTableExist) {
+        try {
             if (TableUtils.createTableIfNotExists(amazonDynamoDB, new DynamoDBMapper(amazonDynamoDB).generateCreateTableRequest(Person.class)
                     .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)))) {
-                System.out.println("create table");
+                System.out.println("create table peroson");
                 TableUtils.waitUntilActive(amazonDynamoDB, "Person");
             } else {
-                System.out.println("exist table");
+                System.out.println("exist table Person");
             }
-            personTableExist = true;
-        } */
+        } catch (Exception e) {
+            System.err.println("error: " + e);
+        }
+
     }
 
     // TODO add test methods here.
@@ -102,6 +87,6 @@ public class DemoUnitTest {
     //
     @Test
     public void hello() {
-        System.err.println("hello");
+        System.out.println("hello");
     }
 }

@@ -16,4 +16,5 @@ public interface PersonCustomRepository {
     List<Person> findPersonByCellphoneCustom(String cellphone);
     List<Person> scanPersonByCellphoneCustom(String cellphone);
     List<Person> scanPersonByOcupationNameCustom(String nameOcupation);
+    List<Person> findPersonByNameAndAge(String name, int age);
 }

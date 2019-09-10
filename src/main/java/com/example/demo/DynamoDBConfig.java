@@ -7,33 +7,38 @@ import org.springframework.context.annotation.Configuration;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 
 @Configuration
 @EnableDynamoDBRepositories(basePackages = "com.example.demo.repository")
 public class DynamoDBConfig {
 
-	@Value("${amazon.aws.accesskey}")
-	private String awsAccessKey;
+    @Value("${amazon.aws.accesskey}")
+    private String awsAccessKey;
 
-	@Value("${amazon.aws.secretkey}")
-	private String awsSecretKey;
-        
-        @Value("${amazon.aws.endpoint}")
-	private String awsEndpoint;
+    @Value("${amazon.aws.secretkey}")
+    private String awsSecretKey;
 
+    @Value("${amazon.aws.endpoint}")
+    private String awsEndpoint;
 
-	@Bean
-	public AmazonDynamoDB amazonDynamoDB(AWSCredentials awsCredentials) {
-		@SuppressWarnings("deprecation")
-		AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(awsCredentials);
-		return amazonDynamoDB;
-	}
+    @Bean
+    public AmazonDynamoDB amazonDynamoDB(AWSCredentials awsCredentials) {
+        System.out.println("setting provider amazonDynamoDB");
+        InstanceProfileCredentialsProvider provider = new InstanceProfileCredentialsProvider(false);
+        AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
+                .withCredentials(provider)
+                .build();
+        System.out.println("setting provider amazonDynamoDB end");
+        return amazonDynamoDB;
+    }
 
-	@Bean
-	public AWSCredentials awsCredentials() {
-		return new BasicAWSCredentials(awsAccessKey, awsSecretKey);
-	}
+    @Bean
+    public AWSCredentials awsCredentials() {
+        return new BasicAWSCredentials(awsAccessKey, awsSecretKey);
+    }
 
 }
